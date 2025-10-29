@@ -5,12 +5,13 @@ import cloudinary from '../lib/cloudinary.js';
 const messageController = {
   getUsersForSidebar: async (req, res) => {
     try {
-      const loggedInUserId = req.user._id
-      const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password")
-      res.status(200).json({ filteredUsers })
-    } catch (err) {
-      console.log(`Error in getUsersForSidebar: ${err.message}`)
-      res.status(500).json({ message: "Internal Server Error" })
+      const loggedInUserId = req.user._id;
+      const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+
+      res.status(200).json(filteredUsers);
+    } catch (error) {
+      console.error("Error in getUsersForSidebar: ", error.message);
+      res.status(500).json({ error: "Internal server error" });
     }
   },
   getMessages: async (req, res) => {
@@ -18,10 +19,10 @@ const messageController = {
       const { id: userToChatId } = req.params;
       const myId = req.user._id
 
-      const message = await Message.find({
+      const messages = await Message.find({
         $or: [
-          {senderId: myId, receiverId: userToChatId},
-          {senderId: userToChatId, receiverId: myId}
+          { senderId: myId, receiverId: userToChatId },
+          { senderId: userToChatId, receiverId: myId }
         ]
       })
 
@@ -32,7 +33,7 @@ const messageController = {
       res.status(500).json({ message: "Internal Server Error" })
     }
   },
-  sendMessage: async(req, res) => {
+  sendMessage: async (req, res) => {
     try {
       const { text, image } = req.body;
       const { id: receiverId } = req.params;
@@ -57,7 +58,7 @@ const messageController = {
 
       res.status(201).json(newMessage)
 
-    } catch(err) {
+    } catch (err) {
       console.log(`Error in sendMessage: ${err.message}`)
       res.status(500).json({ message: "Internal Server Error" })
     };

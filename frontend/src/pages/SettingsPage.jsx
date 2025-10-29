@@ -29,7 +29,7 @@ const SettingsPage = () => {
           {THEMES.map((i) => (
             <button
               key={i}
-              className={`group flex cursor-pointer flex-col items-center gap-1.5 p-2 ${theme === i ? "bg-base-200" : "hover:bg-base-200/50"} rounded-lg transition-colors`}
+              className={`group flex cursor-pointer flex-col items-center gap-1.5 p-2 ${theme === i ? "bg-base-200 border border-green-200" : "hover:bg-base-200/50"} rounded-lg transition-colors`}
               onClick={() => setTheme(i)}
             >
               <div
@@ -56,9 +56,7 @@ const SettingsPage = () => {
         <div className="border-base-300 bg-base-100 overflow-hidden rounded-xl border shadow-lg">
           <div className="bg-base-200 p-4">
             <div className="mx-auto max-w-lg">
-              {/* Mock Chat UI */}
               <div className="bg-base-100 overflow-hidden rounded-xl shadow-sm">
-                {/* Chat Header */}
                 <div className="border-base-300 bg-base-100 border-b px-4 py-3">
                   <div className="flex items-center gap-3">
                     <div className="bg-primary text-primary-content flex h-8 w-8 items-center justify-center rounded-full font-medium">
@@ -97,7 +95,7 @@ const SettingsPage = () => {
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      className="input input-bordered h-10 flex-1 text-sm"
+                      className="input rounded-md input-bordered h-10 flex-1 text-sm outline-none"
                       placeholder="Type a message..."
                       value="This is a preview"
                       readOnly
