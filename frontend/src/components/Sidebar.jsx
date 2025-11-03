@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     getUsers();
-  }, [getUsers]);
+  }, [getUsers, onlineUsers.length]);
 
   const safeUsers = Array.isArray(users) ? users : [];
 
