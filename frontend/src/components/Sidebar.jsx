@@ -15,9 +15,11 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers]);
 
+  const safeUsers = Array.isArray(users) ? users : [];
+
   const filteredUsers = showOnlineUsers
-    ? users.filter((user) => onlineUsers.includes(user._id))
-    : users;
+    ? safeUsers.filter((user) => onlineUsers.includes(user._id))
+    : safeUsers;
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -29,7 +31,6 @@ const Sidebar = () => {
           <span className="hidden font-medium lg:block">Contacts</span>
         </div>
 
-        {/* TASK: online filtered (toggle) */}
         <div className="mt-3 hidden lg:flex items-center gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <input 
@@ -40,7 +41,7 @@ const Sidebar = () => {
             />
             <span className="text-sm">Show online only</span>
           </label>
-          <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
+          <span className="text-xs text-zinc-500">({Math.max((onlineUsers?.length ?? 0) - 1, 0)} online)</span>
         </div>
       </div>
 
