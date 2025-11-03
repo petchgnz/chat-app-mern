@@ -1,0 +1,21 @@
+{
+  "name": "chat-app-mern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build":"",
+    "start":""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petchgnz/chat-app-mern.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/petchgnz/chat-app-mern/issues"
+  },
+  "homepage": "https://github.com/petchgnz/chat-app-mern#readme"
+}
