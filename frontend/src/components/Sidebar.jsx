@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import { useChatStore } from "../store/useChatStore.js";
 import { useAuthStore } from "../store/useAuthStore.js";
@@ -9,10 +9,15 @@ const Sidebar = () => {
     useChatStore();
 
   const { onlineUsers } = useAuthStore();
+  const [showOnlineUsers, setShowOnlineUsers] = useState(false);
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
+
+  const filteredUsers = showOnlineUsers
+    ? users.filter((user) => onlineUsers.includes(user._id))
+    : users;
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -21,38 +26,55 @@ const Sidebar = () => {
       <div className="border-base-300 w-full border-b p-5">
         <div className="flex items-center gap-2">
           <User className="size-6" />
-          <span className="font-medium hidden lg:block">Contacts</span>
+          <span className="hidden font-medium lg:block">Contacts</span>
         </div>
 
         {/* TASK: online filtered (toggle) */}
+        <div className="mt-3 hidden lg:flex items-center gap-2">
+          <label className="cursor-pointer flex items-center gap-2">
+            <input 
+              type="checkbox" 
+              checked={showOnlineUsers}
+              onChange={e => setShowOnlineUsers(e.target.checked)}
+              className="checkbox checkbox-sm"
+            />
+            <span className="text-sm">Show online only</span>
+          </label>
+          <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
+        </div>
       </div>
 
-      <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => (
+      <div className="w-full overflow-y-auto py-3">
+        {filteredUsers.map((user) => (
           <button
             key={user._id}
             onClick={() => setSelectedUser(user)}
-            className={`cursor-pointer w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}`}
+            className={`hover:bg-base-300 flex w-full cursor-pointer items-center gap-3 p-3 transition-colors ${selectedUser?._id === user._id ? "bg-base-300 ring-base-300 ring-1" : ""}`}
           >
             <div className="relative mx-auto lg:mx-0">
-              <img 
-                src={user.profilePic || "/avatar.png"} 
+              <img
+                src={user.profilePic || "/avatar.png"}
                 alt={user.name}
-                className="size-12 object-cover rounded-full"
+                className="size-12 rounded-full object-cover"
               />
               {onlineUsers.includes(user._id) && (
-                <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
+                <span className="absolute right-0 bottom-0 size-3 rounded-full bg-green-500 ring-2 ring-zinc-900" />
               )}
             </div>
 
-            <div className="hidden lg:block text-left min-w-0">
-              <div className="font-medium truncate">{user.fullName}</div>
+            <div className="hidden min-w-0 text-left lg:block">
+              <div className="truncate font-medium">{user.fullName}</div>
               <div className="text-sm text-zinc-400">
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>
             </div>
           </button>
         ))}
+
+        {filteredUsers.length === 0 && (
+          <div className="text-center text-zinc-500 py-4">No online users</div>
+        )}
+
       </div>
     </aside>
   );
